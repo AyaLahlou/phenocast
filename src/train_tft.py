@@ -229,6 +229,7 @@ def process_batch(
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Description of your script.")
     parser.add_argument("filename", type=str, help="data filename")
+    parser.add_argument("--checkpoint", type=str, default=None, help="Path to pre-trained model")
 
     args = parser.parse_args()
     filename = args.filename
@@ -373,6 +374,13 @@ if __name__ == "__main__":
         device
     )
 
+    if args.checkpoint:
+        print(f"Loading pre-trained checkpoint from {args.checkpoint}")
+        pretrained_dict = torch.load(args.checkpoint, map_location=device)
+        model.load_state_dict(pretrained_dict)
+        print("Loaded checkpoint!")
+
+        
     while epoch_idx < max_epochs:
         print(f"Starting Epoch Index {epoch_idx}")
 
